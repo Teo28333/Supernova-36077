@@ -12,6 +12,17 @@ public class Intake_SS {
     public Intake_SS(HardwareMap hwm, Telemetry telemetry, String motorName) {
         this.telemetry = telemetry;
         motor = hwm.get(DcMotorEx.class, motorName);
+    }
+
+    public void read() {
+
+    }
+
+    public void update() {
+
+    }
+
+    public void write() {
 
     }
 }
