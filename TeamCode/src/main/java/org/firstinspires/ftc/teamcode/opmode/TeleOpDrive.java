@@ -35,7 +35,7 @@ public class TeleOpDrive extends OpMode {
             follower.setPose(cornerPose); // overrides our pose
         }
 
-        if (gamepad1.left_bumper) {
+        if (gamepad1.right_bumper) {
             intakeMotor.setPower(-1.0);
         } else {
             intakeMotor.setPower(0.0);
