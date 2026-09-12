@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
+import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.follower.ManualDrive;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.teamcode.subsystems.Intake_SS;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -12,22 +15,27 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class TeleOpDrive extends OpMode {
     private Follower follower;
     private DcMotorEx intakeMotor;
+    private Intake_SS intake_ss;
 
     @Override
     public void init() {
         follower = Constants.create(hardwareMap);
         intakeMotor = hardwareMap.get(DcMotorEx.class, "iMotor");
+        intake_ss = new Intake_SS(hardwareMap, telemetry, "iMotor");
     }
 
     @Override
     public void loop() {
         telemetry.update();
 
-        follower.manual(
+        DrivePowers powers = ManualDrive.fieldCentric(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
-                -gamepad1.right_stick_x
+                -gamepad1.right_stick_x,
+                follower.pose().heading()
         );
+
+        follower.manual(powers);
 
         // relocalise button
         if (gamepad1.startWasPressed()) {
@@ -36,9 +44,11 @@ public class TeleOpDrive extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            intakeMotor.setPower(-1.0);
+            intake_ss.intakeCMD();
+        } else if (gamepad1.circle) {
+            intake_ss.outtakeCMD();
         } else {
-            intakeMotor.setPower(0.0);
+            intake_ss.stop();
         }
 
         follower.update();
