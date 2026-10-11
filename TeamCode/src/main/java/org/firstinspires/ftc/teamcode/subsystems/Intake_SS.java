@@ -31,7 +31,6 @@ public class Intake_SS {
 
     public void write() {
         motor.setPower(motorPower);
-
     }
 
     public void intakeCMD() {
