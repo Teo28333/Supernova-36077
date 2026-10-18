@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems.Shooter;
+package org.firstinspires.ftc.teamcode.subsystems.shooter;
 
 import com.pedropathing.math.Vector;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-//push2
+
 /*
 tres important: FRONTSPIN
  */
-public class Shoot {
+public class ShooterSS {
     private DcMotorEx motor1;
     private DcMotorEx motor2;
     private Servo hood;
@@ -35,7 +35,7 @@ public class Shoot {
     private boolean tuningMode = false;
     private boolean autonMode = false;
 
-    public Shoot(HardwareMap hwm, Telemetry telemetry,
+    public ShooterSS(HardwareMap hwm, Telemetry telemetry,
                  String shooterMotor1, String shooterMotor2,
                  String hoodServo, String led2) {
         this.telemetry = telemetry;
@@ -117,7 +117,6 @@ public class Shoot {
 }
 
 //pas fini
-
 
 
 

@@ -37,6 +37,12 @@ public class TeleOpDrive extends OpMode {
 
         follower.manual(powers);
 
+        // relocalise button
+        if (gamepad1.startWasPressed()) {
+            Pose cornerPose = new Pose(10.5, 10.5, Math.toRadians(90));
+            follower.setPose(cornerPose); // overrides our pose
+        }
+
         if (gamepad1.right_bumper) {
             intake_ss.intakeCMD();
         } else if (gamepad1.circle) {
