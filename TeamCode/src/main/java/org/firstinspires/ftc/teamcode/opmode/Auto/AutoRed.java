@@ -1,62 +1,93 @@
+
 package org.firstinspires.ftc.teamcode.opmode.Auto;
-
-import static com.pedropathing.api.Paths.*;
-
-import android.widget.Switch;
-
-import com.pedropathing.api.Paths;
-
-import com.pedropathing.api.PoseFactory;
-import com.pedropathing.math.Pose;
-import com.pedropathing.paths.Path;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import com.pedropathing.follower.Follower;
 
-@Autonomous(name = "AutoRed", group = "Examples")
-public class AutoRed {
+import org.firstinspires.ftc.teamcode.pedro.Constants;
+import org.firstinspires.ftc.teamcode.robot.RobotAuton;
+import org.firstinspires.ftc.teamcode.opmode.Auto.Path.AutoPath;
 
-    private final PoseFactory poseFactory = PoseFactory.degrees();
+@Autonomous(name = "Auto Red")
+public class AutoRed extends OpMode {
 
-    private final Pose start = poseFactory.of(32.5, 9, 180);
-    private final Pose fleur1 = poseFactory.of(10, 47, 180);
-    private final Pose fleur1Control1 = poseFactory.of(35, 44, 0);
-    private final Pose flaur2ShotStart = poseFactory.of(10, 47, 180);
-    private final Pose flaur2Shot = poseFactory.of(47, 132, 90);
-    private final Pose flaur2ShotControl1 = poseFactory.of(35, 82, 0);
-    private final Pose intakePrepStart = poseFactory.of(47, 132, 90);
-    private final Pose intakePrep = poseFactory.of(32, 9, 180);
-    private final Pose intakePrepControl1 = poseFactory.of(82, 45, 0);
-    private final Pose intakeStart = poseFactory.of(32, 9, 180);
-    private final Pose intake = poseFactory.of(9, 9, 180);
-    private final Pose parkShootStart = poseFactory.of(9, 9, 180);
-    private final Pose parkShoot = poseFactory.of(9, 103, 180);
-    private final Pose parkShootControl1 = poseFactory.of(51, 81, 0);
+    private Follower follower;
+    private RobotAuton robot;
+    private AutoPath path;
 
-
-
-
-
-    public Path fleur1() {
-        return Paths.curve(start, fleur1Control1, fleur1).linear(start, fleur1);
+    private enum AutoStep {
+        FLEUR1,
+        FLEUR2_SHOT,
+        INTAKE_PREP,
+        INTAKE,
+        PARK_SHOOT,
+        DONE
     }
 
-    public Path fleur2Shot() {
-        return Paths.curve(flaur2ShotStart, flaur2ShotControl1, flaur2Shot).linear(flaur2ShotStart, flaur2Shot);
+    private AutoStep step = AutoStep.FLEUR1;
+
+    @Override
+    public void init() {
+        follower = Constants.create(hardwareMap);
+        robot = new RobotAuton(follower);
+        path = new AutoPath();
+        robot.start(path.start);
+        telemetry.addLine("Auto Red Ready");
+        telemetry.update();
     }
 
-    public Path intakePrep() {
-        return Paths.curve(intakePrepStart, intakePrepControl1, intakePrep).linear(intakePrepStart, intakePrep);
+    @Override
+    public void start() {
+        step = AutoStep.FLEUR1;
+        robot.followPath(path.fleur1());
     }
 
-    public Path intake() {
-        return Paths.line(intakeStart, intake).linear(intakeStart, intake);
+    @Override
+    public void loop() {
+        robot.update();
+
+        if (step != AutoStep.DONE && !robot.isBusy()) {
+            startNextStep();
+        }
+
+        telemetry.addData("pathState", step);
+        telemetry.addData("Robot occupé", robot.isBusy());
+        telemetry.addData("X", robot.getPose().x());
+        telemetry.addData("Y", robot.getPose().y());
+        telemetry.update();
     }
 
-    public Path parkShoot() {
-        return Paths.curve(parkShootStart, parkShootControl1, parkShoot).linear(parkShootStart, parkShoot);
-    }
+    private void startNextStep() {
+        switch (step) {
 
+            case FLEUR1:
+                step = AutoStep.FLEUR2_SHOT;
+                robot.followPath(path.fleur2Shot());
+                break;
+
+            case FLEUR2_SHOT:
+                step = AutoStep.INTAKE_PREP;
+                robot.followPath(path.intakePrep());
+                break;
+
+            case INTAKE_PREP:
+                step = AutoStep.INTAKE;
+                robot.followPath(path.intake());
+                break;
+
+            case INTAKE:
+                step = AutoStep.PARK_SHOOT;
+                robot.followPath(path.parkShoot());
+                break;
+
+            case PARK_SHOOT:
+                step = AutoStep.DONE;
+                break;
+
+            case DONE:
+                break;
+        }
+    }
 }
-
