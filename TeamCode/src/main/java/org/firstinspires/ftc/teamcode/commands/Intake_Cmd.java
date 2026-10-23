@@ -19,13 +19,8 @@ public class Intake_Cmd {
         this.intake = intake;
     }
 
-    public void update(double robotX, double robotY,
-                       boolean shooterReady, boolean aimedAtTarget) {
-        update(robotX, robotY, 0.0, shooterReady, aimedAtTarget);
-    }
 
-    public void update(double robotX, double robotY, double robotHeading,
-                       boolean shooterReady, boolean aimedAtTarget) {
+    public void update(boolean shooterReady, boolean aimedAtTarget) {
         switch (currentMode) {
             case INTAKING:
                 intake.intakeCMD();
@@ -40,7 +35,7 @@ public class Intake_Cmd {
                 break;
 
             case TRANSFERRING:
-                intake.transferCMD(robotX, robotY, robotHeading, shooterReady, aimedAtTarget);
+                intake.transferCMD(shooterReady, aimedAtTarget);
                 break;
 
             case IDLE:

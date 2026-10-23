@@ -220,8 +220,8 @@ public class Intake_SS {
         ledColor = INTAKE_IDLE;
     }
 
-    public void transferCMD(double x, double y, double headingRadians,
-                            boolean ready, boolean aimedAtTarget) {
+    public void transferCMD(boolean ready, boolean aimedAtTarget) {
+
         isIntaking = false;
         intakeStarted = false;
         boolean canAim = aimedAtTarget || ignoreAimCheck;
@@ -322,4 +322,3 @@ public class Intake_SS {
     }
 
 }
-
