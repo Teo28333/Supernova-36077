@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake_SS;
 public class Robot {
     private final Telemetry telemetry;
     private final Follower follower;
-    private final Intake_SS intake;
+   // private final Intake_SS intake;
     private boolean started;
     private long lastLoopTimeNs;
     private double loopHz;
@@ -27,15 +27,15 @@ public class Robot {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
         follower = Constants.create(hardwareMap);
-        intake = new Intake_SS(hardwareMap, telemetry, "iMotor");
-        intake.stop();
-        intake.write();
+        //intake = new Intake_SS(hardwareMap, telemetry, "iMotor");
+        //intakeStop
+        //intakeWrite
     }
 
     public void start() {
         follower.stop();
-        intake.stop();
-        intake.write();
+        //intakeStop
+        //intakeWrite
         lastLoopTimeNs = 0L;
         loopHz = 0.0;
         started = true;
@@ -64,14 +64,14 @@ public class Robot {
         ));
         // Preserve the existing held-button controls and their priority.
         if (gamepad.right_bumper) {
-            intake.intakeCMD();
+            //intake
         } else if (gamepad.circle) {
-            intake.outtakeCMD();
+            //outtake
         } else {
-            intake.stop();
+            //intakeStop
         }
         follower.update();
-        intake.update();
+        //intake.update();
 
         Pose pose = follower.pose();
         telemetry.addData("Robot X", pose.x());
@@ -94,8 +94,8 @@ public class Robot {
         try {
             follower.stop();
         } finally {
-            intake.stop();
-            intake.write();
+            //intake.stop();
+            //intake.write();
         }
     }
 

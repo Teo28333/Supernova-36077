@@ -21,7 +21,6 @@ public class TeleOpDrive extends OpMode {
     public void init() {
         follower = Constants.create(hardwareMap);
         intakeMotor = hardwareMap.get(DcMotorEx.class, "iMotor");
-        intake_ss = new Intake_SS(hardwareMap, telemetry, "iMotor");
     }
 
     @Override
@@ -44,11 +43,11 @@ public class TeleOpDrive extends OpMode {
         }
 
         if (gamepad1.right_bumper) {
-            intake_ss.intakeCMD();
+            //intake
         } else if (gamepad1.circle) {
-            intake_ss.outtakeCMD();
+            //intake
         } else {
-            intake_ss.stop();
+            //intake
         }
 
         follower.update();

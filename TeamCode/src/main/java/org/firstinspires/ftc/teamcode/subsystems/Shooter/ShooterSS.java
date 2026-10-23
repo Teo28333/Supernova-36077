@@ -6,8 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.LED;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+import kotlin.jvm.internal.PropertyReference0Impl;
 
 /*
 tres important: FRONTSPIN
@@ -17,9 +20,8 @@ public class ShooterSS {
     private DcMotorEx motor2;
     private Servo hood;
     private Servo led;
-    private Telemetry telemetry;
 
-    //LED vont aller la
+    private Telemetry telemetry;
 
     private double motorPow = 0.0;
     private double hoodPos = 0.0;
@@ -37,7 +39,7 @@ public class ShooterSS {
 
     public ShooterSS(HardwareMap hwm, Telemetry telemetry,
                  String shooterMotor1, String shooterMotor2,
-                 String hoodServo, String led2) {
+                 String hoodServo) {
         this.telemetry = telemetry;
 
         motor1 = hwm.get(DcMotorEx.class, shooterMotor1);
@@ -48,12 +50,7 @@ public class ShooterSS {
         motor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         hood = hwm.get(Servo.class, hoodServo);
-
-        led = hwm.get(Servo.class, led2);
-        /* a reactiver quand varialble des led vont marcher
-
-        led.setPosition(ledColor);
-         */
+        led = hwm.get(Servo.class, "led2");
 
         /* a reactiver quand j'ai trouve comment mettre pidfControllers
 
@@ -64,27 +61,24 @@ public class ShooterSS {
     public void read() {
         currentVelRPM = Math.abs(motor1.getVelocity());
     }
-        /*a reactiver plus tard quand je vais avoir mis le HadwareWriteCache
 
-        public void write() {
-        HardwareWriteCache.setMotorPower(motor1, motorPow);
-        HardwareWriteCache.setMotorPower(motor2, motorPow);
-        HardwareWriteCache.setServoPosition(hood, hoodPos);
-        led.setPosition(ledColor);
-    }*/
 
     public void update() {
         read();
-        //write
+        write();
         telemetry();
     }
 
     public void update(boolean showTelemetry) {
         read();
-        //write
-        if (showTelemetry) {
+        write();
+         if (showTelemetry) {
             telemetry();
         }
+    }
+
+    public void write() {
+
     }
 
     public void telemetry() {
