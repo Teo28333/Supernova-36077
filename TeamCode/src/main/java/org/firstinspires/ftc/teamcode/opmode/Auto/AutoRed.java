@@ -31,7 +31,7 @@ public class AutoRed extends OpMode {
     @Override
     public void init() {
         follower = Constants.create(hardwareMap);
-        robot = new RobotAuton(follower);
+        robot = new RobotAuton(hardwareMap, telemetry, false);
         path = new AutoPath();
         robot.start(path.start);
         telemetry.addLine("Auto Red Ready");
@@ -79,7 +79,7 @@ public class AutoRed extends OpMode {
 
             case INTAKE:
                 step = AutoStep.PARK_SHOOT;
-                robot.followPath(path.parkShoot());
+                robot.followPathAndIntake(path.parkShoot());
                 break;
 
             case PARK_SHOOT:
