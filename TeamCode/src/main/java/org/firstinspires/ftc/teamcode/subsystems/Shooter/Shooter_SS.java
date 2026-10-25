@@ -2,6 +2,7 @@
 package org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import org.firstinspires.ftc.teamcode.math.ShooterEquation;
+import org.firstinspires.ftc.teamcode.math.PIDFSController;
 
 import static org.firstinspires.ftc.teamcode.constants.ShooterConstants.*;
 
@@ -17,6 +18,7 @@ public class Shooter_SS {
 
     private DcMotorEx motor1;
     private DcMotorEx motor2;
+    private PIDFSController pidfsController;
 
     private Servo hood;
     private Servo led;
@@ -64,6 +66,8 @@ public class Shooter_SS {
 
         hood = hwm.get(Servo.class, hoodServo);
         led = hwm.get(Servo.class, "led2");
+
+        pidfsController = new PIDFSController(hwm);
     }
 
     public void read() {
@@ -199,7 +203,7 @@ public class Shooter_SS {
         hoodDrop = 0.0;
         hoodPos = baseHoodPos;
 
-        // PIDF
+        motorPow = pidfsController.calculate(correctedTargetRPM, currentVelRPM);
     }
 
     public void setTuningMode(boolean enabled) {
